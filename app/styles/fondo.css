@@ -1,0 +1,65 @@
+/* ====================== FONDO DE LA PÁGINA =====================
+   Lienzo de formas detrás de todo. Las secciones con fondo propio
+   (las bandas y el pie) las tapan, y asoman en los tramos blancos. */
+.fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Las formas se salen por los lados a propósito: sin esto saldría
+     barra de scroll horizontal. */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.forma {
+  position: absolute;
+  /* Siempre circulares: el ancho manda y el alto lo sigue. */
+  aspect-ratio: 1 / 1;
+  will-change: transform;
+}
+
+.forma--disco,
+.forma--punto {
+  border-radius: 50%;
+}
+
+/* Mancha orgánica: un círculo deformado por esquinas. Color plano, sin
+   degradado; la variedad la dan el tamaño y la opacidad. */
+.forma--blob {
+  border-radius: 62% 38% 54% 46% / 48% 62% 38% 52%;
+}
+
+/* Solo el trazo: aligera la composición cuando hay varias cerca. */
+.forma--aro {
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+/* En móvil se quedan las pequeñas: las grandes ocupan media pantalla y
+   compiten con el texto en vez de acompañarlo. */
+@media (max-width: 760px) {
+  .forma--blob,
+  .forma--disco {
+    display: none;
+  }
+  .forma--aro {
+    opacity: 0.4 !important;
+  }
+}
+
+/* Onda de la esquina superior izquierda. Nace pegada al vértice: en
+   la referencia el tono llena el borde entero y se va abriendo. */
+.fondo__onda {
+  position: absolute;
+  /* En píxeles, no en %: el lienzo mide la página entera y un % se
+     iría cientos de píxeles por encima del hero. */
+  top: 0;
+  left: 0;
+  width: clamp(280px, 34vw, 560px);
+  height: auto;
+}
+@media (max-width: 760px) {
+  .fondo__onda {
+    width: 80%;
+  }
+}

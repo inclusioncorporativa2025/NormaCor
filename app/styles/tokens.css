@@ -1,0 +1,100 @@
+/* =============================================================
+   TOKENS  —  punto único de cambio de color
+   Los dos colores de marca son --brand (azul) y --lilac; todo lo
+   demás son tonos suyos. Aquí no hay ningún degradado: todos los
+   valores son colores planos.
+   ============================================================= */
+:root {
+  /* --- Azul de marca --- escala sobre #8FA7CC (H216 S37%) --- */
+  --brand-50: #f5f7fb;
+  --brand-100: #eaeef5;
+  --brand-200: #d6dfec;
+  --brand-300: #b9c8df;
+  --brand: #8fa7cc; /* PRINCIPAL */
+  --brand-500: #7794c1;
+  --brand-600: #5378b0;
+  --brand-700: #405f8e;
+  --brand-800: #304669;
+  --brand-900: #22324a;
+
+  /* --- Lila de marca --- escala sobre #DAC1EB (H276 S51%) --- */
+  --lilac-50: #f9f4fc;
+  --lilac-100: #f1e8f8;
+  --lilac-200: #e4d2f1;
+  --lilac: #dac1eb; /* PRINCIPAL */
+  --lilac-400: #bb8eda;
+  --lilac-500: #a669cf;
+  --lilac-700: #71329c;
+  --lilac-900: #3b1a52;
+
+  /* Acento de acción. Es --brand oscurecido: sobre el azul claro el
+     texto blanco se queda en 2,3:1, y así llega a 6,5:1. */
+  --accent: var(--brand-700);
+  --accent-ink: #ffffff;
+
+  /* --- Grises --- fríos, para que acompañen al azul --- */
+  --grey-25: #fcfdfe;
+  --grey-50: #f4f6f9;
+  --grey-100: #edf0f5;
+  --grey-200: #e2e7ef;
+  --grey-300: #cdd5e1;
+
+  /* --- Tinta --- negro azulado, no neutro puro --- */
+  --ink: #151a22;
+  --ink-soft: #4a5262;
+  --ink-dim: #5d6779; /* texto pequeño secundario */
+  --ink-muted: #7d8a9f;
+  --on-brand: #ffffff;
+
+  /* --- Semánticos --- */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --border: var(--grey-200);
+  --text: var(--ink);
+  --text-muted: var(--ink-dim);
+
+  /* --- Tipografía --- */
+  --font-display: var(--font-instrument), Georgia, serif;
+  --font-sans: var(--font-inter-tight), -apple-system, "Segoe UI", sans-serif;
+
+  --step--1: clamp(0.84rem, 0.8rem + 0.15vw, 0.92rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  --step-1: clamp(1.14rem, 1.06rem + 0.4vw, 1.45rem);
+  /* El titular también mira la ALTURA: el hero ocupa una pantalla exacta,
+     y atado solo al ancho aplastaba el visual en monitores bajos. */
+  --step-hero: clamp(2.05rem, min(0.9rem + 4.7vw, 6.4vh), 4.6rem);
+
+  /* --- Layout --- */
+  /* Fondo de las secciones que van en banda a sangre (tres puertas,
+     categorías, testimonios). Dos capas: debajo, el barrido en diagonal
+     del azul de marca al lila; encima, un velo que funde a blanco por
+     arriba y por abajo para que la banda no corte en seco. El velo va en
+     rgba y no en `transparent` porque algunos motores interpolan
+     `transparent` pasando por negro y ensucian el borde. El tono va bajo
+     a propósito: lo que se tiene que notar es el paso de un color al
+     otro, no el color. */
+  --fondo-banda:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(255, 255, 255, 0) 76%,
+      #ffffff 100%
+    ),
+    linear-gradient(
+      112deg,
+      var(--brand-100) 0%,
+      var(--brand-50) 32%,
+      var(--lilac-50) 64%,
+      var(--lilac-100) 100%
+    );
+
+  /* Aire vertical de cada sección. Único mando del ritmo de la página. */
+  --seccion-pad: clamp(4rem, 11vh, 8rem);
+  --gutter: clamp(1.1rem, 3vw, 2.5rem);
+  --maxw: 1420px;
+
+  --r-pill: 999px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}

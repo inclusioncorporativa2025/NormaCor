@@ -1,0 +1,93 @@
+/* ========================== TESTIMONIOS ========================
+   Tres citas en fila. Bloque aparte del de confianza: juntos se
+   estorban y ninguno de los dos se lee. */
+.testimonios {
+  /* Banda a sangre: el degradado vive en tokens.css. */
+  background: var(--fondo-banda);
+}
+.testimonios__titulo {
+  margin-bottom: clamp(2rem, 5vh, 3rem);
+  max-width: 20ch;
+  font-size: clamp(1.9rem, 1.25rem + 2.1vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+.testimonios__titulo span {
+  display: block;
+  color: var(--accent);
+}
+
+.testimonios__lista {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+}
+@media (min-width: 900px) {
+  .testimonios__lista {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.testi {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 3vw, 2.1rem);
+  border: 1px solid var(--grey-200);
+  border-radius: 24px;
+  background: #ffffff;
+}
+.testi__comilla {
+  font-size: 3.2rem;
+  line-height: 0.6;
+  color: var(--brand-300);
+  /* La comilla cuelga del borde superior, no empuja al texto. */
+  height: 1.4rem;
+}
+
+.testi__cita {
+  flex: 1;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.62;
+}
+
+.testi__autor {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: clamp(1.3rem, 3vh, 1.8rem);
+  padding-top: clamp(1rem, 2.5vh, 1.3rem);
+  border-top: 1px solid var(--grey-200);
+}
+.testi__inicial {
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  /* Hueco para la foto del cliente, o inicial si no la hay. */
+  background: var(--lilac-100);
+}
+.testi__autor strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.testi__autor em {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--ink-muted);
+  font-size: 0.86rem;
+  font-style: normal;
+}
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-testi] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-testi] {
+    opacity: 1;
+    transform: none;
+  }
+}

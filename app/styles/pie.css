@@ -1,0 +1,163 @@
+/* ============================= PIE =============================
+   Cierra la página sobre el fondo calcado de la referencia (PieFondo).
+   El contenido va por encima de la ilustración, no esquivándola, así que
+   los tonos del texto están elegidos para aguantar sobre las olas y los
+   círculos, que es lo más oscuro que hay debajo. */
+.pie {
+  position: relative;
+  overflow: hidden;
+  /* El fondo va pegado abajo y se recorta por arriba (ver `slice` en
+     PieFondo). El alto mínimo es el que hace falta para que ese recorte
+     no llegue a la cresta de la ola, que está a 160 de los 528 del
+     lienzo: quedan 368 de dibujo bajo ella, escalados al ancho de
+     pantalla, más 3rem de aire. Con menos, la ola y la línea se
+     cortaban en recto contra el borde de arriba. */
+  min-height: calc(100vw * 368 / 1542 + 3rem);
+  padding-block: clamp(2.25rem, 5vh, 3.25rem) clamp(1.25rem, 3vh, 1.75rem);
+  /* El mismo tono del fondo de la referencia. Arranca en blanco para
+     no dejar un filo contra la sección de encima, que es blanca. */
+  background: linear-gradient(180deg, #ffffff 0, #f7f9fd 90px);
+  color: var(--ink);
+}
+.pie {
+  display: flex;
+  flex-direction: column;
+}
+
+.pie__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.pie__interior {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ---------------------------- Reparto -------------------------- */
+.pie__alto {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+}
+@media (min-width: 900px) {
+  .pie__alto {
+    grid-template-columns: 1fr 1.15fr;
+  }
+}
+
+.pie__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  max-width: 38ch;
+}
+.pie__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.pie__logo em {
+  font-style: normal;
+  /* El azul claro de marca sobre blanco no llega a 3:1; va el oscuro. */
+  color: var(--accent);
+}
+.pie__claim {
+  color: var(--ink-dim);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.pie__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  /* Un escalón más oscuro que el acento: con la ilustración subida, el
+     círculo lila llega hasta aquí y --accent se quedaba en 3,9:1. */
+  color: var(--brand-800);
+}
+.pie__flecha {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid var(--brand-300);
+  border-radius: 50%;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+.pie__cta:hover .pie__flecha {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* --------------------------- Columnas -------------------------- */
+.pie__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+}
+.pie__col-titulo {
+  margin-bottom: 0.9rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  /* --ink-muted se quedaba en 3,4:1 incluso sobre el fondo liso, y en
+     2,3:1 cuando el título cae encima del punto azul. */
+  color: var(--ink-soft);
+}
+.pie__col li + li {
+  margin-top: 0.55rem;
+}
+.pie__col a {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  transition: color 0.2s var(--ease);
+}
+.pie__col a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* ---------------------------- Remate --------------------------- */
+.pie__bajo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  /* Empujado al fondo del pie: el hueco sobrante va entre el contenido
+     y el remate. */
+  margin-top: auto;
+  padding-top: clamp(1.75rem, 4vh, 2.5rem);
+  /* Cae encima de las olas: --ink-muted ahí se queda en 2,6:1. */
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-pie] {
+  opacity: 0;
+}
+.js [data-pie] {
+  transform: translateY(20px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-pie] {
+    opacity: 1;
+    transform: none;
+  }
+}

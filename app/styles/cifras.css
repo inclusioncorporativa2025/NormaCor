@@ -1,0 +1,94 @@
+/* ============================= CIFRAS ==========================
+   Banda estrecha de números. Va suelta, no dentro del bloque de
+   confianza: amontonar cifras, motivos y testimonios en el mismo
+   sitio los deja sin peso a los tres. */
+.cifras {
+  position: relative;
+  /* Las formas se salen por los lados de la pantalla a propósito. */
+  overflow: hidden;
+  /* Las formas viven en el hueco de debajo de las cifras, hasta los
+     testimonios: abajo hace falta el sitio de las formas más un margen,
+     porque tienen que caber enteras o se cortarían en recto contra la
+     banda de testimonios, que es opaca. */
+  --pad-arriba: var(--seccion-pad);
+  --pad-abajo: calc(var(--alto-formas) * 0.7 + var(--seccion-pad) * 0.5);
+  --alto-formas: clamp(170px, 17vw, 270px);
+}
+
+/* ---------------------------- Formas --------------------------- */
+.cifras__formas {
+  position: absolute;
+  bottom: clamp(14px, 1.6vw, 24px);
+  z-index: 0;
+  height: var(--alto-formas);
+  /* 360 × 300 en el lienzo: el ancho sale del alto. */
+  width: calc(var(--alto-formas) * 1.2);
+  pointer-events: none;
+}
+.cifras__formas--izq {
+  left: 0;
+}
+.cifras__formas--dcha {
+  right: 0;
+}
+/* En móvil las cifras se apilan a todo el ancho y las formas caerían
+   encima de los números. */
+@media (max-width: 759px) {
+  .cifras__formas {
+    display: none;
+  }
+  /* Sin formas, el hueco reservado para ellas quedaba en blanco. */
+  .cifras {
+    --pad-abajo: var(--seccion-pad);
+  }
+}
+
+.cifras__fila {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+}
+@media (min-width: 760px) {
+  .cifras__fila {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  /* Filetes entre columnas, no cajas: la banda tiene que leerse de un
+     vistazo y un borde completo la trocearía. */
+  .cifra + .cifra {
+    border-left: 1px solid var(--grey-200);
+  }
+}
+
+.cifra {
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+.cifra__n {
+  font-size: clamp(2.6rem, 1.8rem + 3vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--accent);
+  /* Los dígitos no bailan de ancho mientras sube la cuenta. */
+  font-variant-numeric: tabular-nums;
+}
+.cifra__rotulo {
+  margin-top: 0.7rem;
+  color: var(--ink-dim);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-cifra] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-cifra] {
+    opacity: 1;
+    transform: none;
+  }
+}

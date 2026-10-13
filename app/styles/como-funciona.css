@@ -1,0 +1,172 @@
+/* ======================== CÓMO FUNCIONA ========================
+   Titular a la izquierda sobre dos círculos de marca, y los tres pasos
+   numerados a la derecha, separados por filetes. */
+.pasos {
+  /* Los círculos se salen del ancho de la columna a propósito. */
+  overflow: hidden;
+}
+.pasos__grid {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+@media (min-width: 1000px) {
+  .pasos {
+    /* Los círculos sobresalen ~120-150px de .pasos__intro; necesitamos
+       más padding que el valor base para que .pasos no los corte. */
+    --pad-arriba: clamp(9rem, 15vh, 12rem);
+    --pad-abajo: clamp(10rem, 17vh, 13rem);
+  }
+  .pasos__grid {
+    grid-template-columns: 1fr 1.05fr;
+    align-items: center;
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+}
+
+/* ---------------------------- Titular -------------------------- */
+.pasos__intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+/* Mismo motivo de cuatro puntos que el nav y categorías. */
+.pasos__mark {
+  display: grid;
+  grid-template-columns: repeat(2, 8px);
+  gap: 3.5px;
+  margin-bottom: 0.2rem;
+}
+.pasos__mark i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.pasos__mark i:first-child {
+  background: var(--accent);
+}
+.pasos__mark i:nth-child(4) {
+  background: var(--lilac-400);
+}
+
+.pasos__titulo {
+  font-size: clamp(1.9rem, 1.25rem + 2.1vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+.pasos__titulo span {
+  display: block;
+  color: var(--accent);
+}
+.pasos__sub {
+  max-width: 30ch;
+  color: var(--ink-dim);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+/* El botón es el mismo .btn--lg del hero; aquí solo el respiro. */
+.pasos__cta {
+  margin-top: 0.7rem;
+}
+
+/* -------------------------- Círculos ---------------------------
+   Van en el hueco que queda a la derecha del titular, no debajo: con
+   el texto encima dejan de leerse como fondo y parecen una chapa. */
+.pasos__halo--a {
+  width: clamp(200px, 23vw, 340px);
+  top: -34%;
+  right: -8%;
+  --op: 0.3;
+  opacity: var(--op);
+}
+.pasos__halo--b {
+  width: clamp(130px, 15vw, 220px);
+  right: 16%;
+  bottom: -42%;
+  --op: 0.55;
+  opacity: var(--op);
+}
+/* Apagados en móvil: ahí el titular ocupa todo el ancho y los círculos
+   se le echan encima en vez de quedar detrás. */
+@media (max-width: 999px) {
+  .pasos__halo--a,
+  .pasos__halo--b {
+    display: none;
+  }
+}
+
+/* ----------------------------- Pasos --------------------------- */
+.pasos__lista {
+  display: grid;
+}
+
+.paso {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: clamp(1.1rem, 2.5vw, 2.2rem);
+  padding-block: clamp(1.3rem, 3vh, 1.9rem);
+  border-top: 1px solid var(--grey-200);
+}
+.paso:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* Número hueco: el relleno es transparente y lo que se ve es el
+   contorno. Sin el truco quedaría un bloque macizo que pesa más que
+   el titular de la izquierda. */
+.paso__n {
+  min-width: 2.2ch;
+  font-size: clamp(2.9rem, 4.5vw, 4.4rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--brand-300);
+  transition: -webkit-text-stroke-color 0.3s var(--ease);
+}
+.paso:hover .paso__n {
+  -webkit-text-stroke-color: var(--accent);
+}
+/* Donde no haya contorno de texto, un tono claro hace el mismo papel. */
+@supports not (-webkit-text-stroke: 1px red) {
+  .paso__n {
+    color: var(--brand-200);
+  }
+}
+
+.paso__titulo {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.028em;
+}
+.paso__texto {
+  margin-top: 0.4rem;
+  max-width: 42ch;
+  color: var(--ink-dim);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-paso] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.js [data-halo-paso] {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-paso] {
+    opacity: 1;
+    transform: none;
+  }
+  .js [data-halo-paso] {
+    opacity: 1;
+  }
+}

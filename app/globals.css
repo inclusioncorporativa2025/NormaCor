@@ -1,0 +1,13 @@
+@import "./styles/tokens.css";
+@import "./styles/base.css";
+@import "./styles/fondo.css";
+@import "./styles/hero.css";
+@import "./styles/puertas.css";
+@import "./styles/como-funciona.css";
+@import "./styles/servicios.css";
+@import "./styles/rueda.css";
+@import "./styles/cifras.css";
+@import "./styles/testimonios.css";
+@import "./styles/cta-final.css";
+@import "./styles/faq.css";
+@import "./styles/pie.css";

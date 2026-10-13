@@ -1,0 +1,430 @@
+/* ===================== RUEDA DE CATEGORÍAS =====================
+   Texto a la izquierda y el racimo de burbujas a la derecha. El color
+   lo pone la sección entera, no un panel. */
+.categorias {
+  /* Banda a sangre: el degradado vive en tokens.css. */
+  background: var(--fondo-banda);
+  /* El anillo es una caja cuadrada que gira: en diagonal sus esquinas
+     se salen por los lados y en móvil daban scroll horizontal. `clip` y
+     no `hidden`, que no crea un contenedor de scroll. */
+  overflow-x: clip;
+}
+.rueda__panel {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+/* ---------------------------- Texto ---------------------------- */
+.rueda__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4rem;
+  max-width: 52ch;
+}
+/* Misma sangría que el copy del hero, para que los dos bloques de texto
+   arranquen en la misma vertical. */
+@media (min-width: 900px) {
+  .rueda__copy {
+    padding-inline-start: clamp(0.5rem, 2.2vw, 2.25rem);
+  }
+  /* Título a la izquierda y órbita a la derecha. La ficha ya no necesita
+     hueco al lado: sale centrada encima del propio círculo. */
+  .rueda__panel {
+    grid-template-columns: 1fr 1.15fr;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+}
+.rueda__title {
+  font-size: clamp(1.8rem, 1.25rem + 1.9vw, 2.75rem);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+  max-width: 16ch;
+}
+.rueda__title span {
+  display: block;
+  color: var(--accent);
+}
+.rueda__sub {
+  max-width: 42ch;
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+
+/* --------------------------- Órbita ----------------------------
+   Logo en el centro y las implantaciones girando alrededor. Al pulsar
+   una, la órbita se va y entra la ficha. */
+.rueda__cloud {
+  position: relative;
+}
+
+/* Cada implantación: un botón redondo con su icono y el nombre debajo. */
+.orb {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.orb__c {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  width: 8rem;
+}
+.orb__disc {
+  display: grid;
+  place-items: center;
+  width: 3.9rem;
+  height: 3.9rem;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--accent);
+  box-shadow: 0 1px 2px rgba(21, 26, 34, 0.05),
+    0 14px 24px -12px rgba(21, 26, 34, 0.3);
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease),
+    scale 0.2s var(--ease);
+}
+.orb.is-hover .orb__disc,
+.orb:focus-visible .orb__disc,
+.orb.is-on .orb__disc {
+  background: var(--accent);
+  color: #ffffff;
+  scale: 1.08;
+}
+.orb.is-on .orb__label {
+  color: var(--ink);
+}
+.orb__label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink-soft);
+}
+
+/* -------------------------- Escenario --------------------------
+   La órbita va centrada; al pulsar una burbuja se va y la ficha entra
+   en su sitio. */
+.escena {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+}
+
+.orbit {
+  --d: clamp(380px, 38vw, 560px);
+  position: relative;
+  width: var(--d);
+  height: var(--d);
+  margin-inline: auto;
+}
+
+/* Traza de la órbita */
+.orbit__path {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  border: 1px solid var(--brand-200);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Núcleo: círculo con el nombre de la marca. */
+.orbit__core {
+  display: grid;
+  justify-items: center;
+  /* align-content, no place-items: sin esto el grid estira las filas
+     para llenar el círculo y separa el logotipo del nombre. */
+  align-content: center;
+  gap: 0.55rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 4px rgba(21, 26, 34, 0.05),
+    0 22px 40px -18px rgba(21, 26, 34, 0.3);
+}
+
+.orbit__core .mark {
+  display: grid;
+  grid-template-columns: repeat(2, 11px);
+  gap: 4px;
+}
+.orbit__core .mark i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.orbit__core .mark i:first-child {
+  background: var(--accent);
+}
+.orbit__core .mark i:nth-child(4) {
+  background: var(--lilac-400);
+}
+
+/* El anillo gira; cada burbuja gira lo mismo al revés y queda recta. */
+.ring {
+  /* 0.43 y no 0.4: al encoger la órbita para hacer sitio a la ficha, dos
+     vecinas quedaban a 150px siendo de 136 de ancho, y se rozaban. */
+  --r: calc(var(--d) * 0.43);
+  position: absolute;
+  inset: 0;
+}
+
+/* El radio se aplica aquí; el rotate de vuelta deja la caja recta. */
+.spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--a)) translate(var(--r)) rotate(calc(-1 * var(--a)));
+}
+.orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+}
+
+/* Móvil y tablet: la misma órbita, a lo ancho de la pantalla y con las
+   burbujas más pequeñas para que las diez quepan sin rozarse. */
+@media (max-width: 899px) {
+  .orbit {
+    --d: min(calc(100vw - var(--gutter) * 2 - 1.5rem), 520px);
+    /* Las burbujas de arriba y abajo sobresalen del círculo. */
+    margin-block: 2.5rem;
+  }
+  .orbit__core {
+    gap: 0.4rem;
+    font-size: 0.82rem;
+  }
+  .orbit__core .mark {
+    grid-template-columns: repeat(2, 8px);
+    gap: 3px;
+  }
+  .orbit__core .mark i {
+    width: 8px;
+    height: 8px;
+  }
+  .orb__c {
+    width: 5.6rem;
+    gap: 0.3rem;
+  }
+  .orb__disc {
+    width: 3rem;
+    height: 3rem;
+  }
+  .orb__disc svg {
+    width: 18px;
+    height: 18px;
+  }
+  .orb__label {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+
+  /* Con una ficha abierta, la órbita se va y la ficha ocupa su sitio.
+     `display: none` y no ocultarla: así no deja un hueco de su alto. */
+  .escena.is-open .orbit {
+    display: none;
+  }
+  .escena {
+    /* Al hacer scroll hasta la ficha, que no se quede debajo del nav. */
+    scroll-margin-top: 6rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .escena {
+    display: block;
+  }
+}
+
+/* ---------------------------- Ficha ----------------------------
+   Foto a sangre de fondo y el contenido encima. Nace del círculo
+   pulsado: GSAP calcula el tamaño de partida y el recorrido. */
+.ficha {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  width: min(100%, 22rem);
+  aspect-ratio: 3 / 4;
+  margin-inline: auto;
+  border-radius: 28px;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 2px 4px rgba(21, 26, 34, 0.08),
+    0 34px 60px -26px rgba(21, 26, 34, 0.45);
+}
+@media (min-width: 900px) {
+  .ficha {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    translate: -50% -50%;
+  }
+}
+
+.ficha__foto {
+  object-fit: cover;
+  z-index: -3;
+}
+/* Capa de marca sobre la foto: la tiñe y deja ver lo que hay debajo. */
+.ficha__capa {
+  object-fit: cover;
+  z-index: -2;
+  opacity: 0.5;
+}
+/* Velo plano, sin degradado. Baja al 18% porque la capa de marca ya
+   oscurece y tiñe lo suyo. */
+.ficha__velo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(13, 17, 25, 0.18);
+}
+
+/* Relleno de las áreas que todavía no tienen foto: plano en el azul de
+   marca con el icono en grande, sin degradado. */
+.ficha__sinfoto {
+  display: grid;
+  /* Arriba a la derecha, no centrado: en el centro le cae el titular
+     encima y el icono se lee como un borrón detrás del texto. */
+  place-items: start end;
+  padding: 2.2rem;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--brand-700);
+  color: var(--brand-500);
+}
+
+.ficha__atras {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  color: var(--ink);
+  cursor: pointer;
+  transition: scale 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+.ficha__atras svg {
+  rotate: 180deg;
+}
+.ficha__atras:hover {
+  background: #ffffff;
+  scale: 1.08;
+}
+
+/* El texto va directo sobre la foto, sin caja. Lo sostienen el velo
+   general y una sombra suave bajo las letras. */
+.ficha__cuerpo {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.5rem 1.4rem 1.4rem;
+  color: #ffffff;
+}
+.ficha__nombre {
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  /* Sin caja detrás, la sombra es lo que separa el texto de la foto. */
+  text-shadow: 0 1px 14px rgba(8, 11, 17, 0.6);
+}
+.ficha__desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 12px rgba(8, 11, 17, 0.6);
+}
+
+.ficha__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.1rem;
+}
+.ficha__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+/* Botón a todo el ancho, como en la referencia. */
+.ficha__cta {
+  display: grid;
+  place-items: center;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--r-pill);
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.ficha__cta:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* --------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-cat],
+.js [data-chip],
+.js [data-core] {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-cat],
+  .js [data-chip],
+  .js [data-core] {
+    opacity: 1;
+  }
+}
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-cat] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-cat] {
+    opacity: 1;
+    transform: none;
+  }
+}

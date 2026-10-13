@@ -1,0 +1,114 @@
+/* =========================== CTA FINAL =========================
+   Cierre corto: una pregunta, una línea y el botón. Nada de repasar
+   el catálogo otra vez al final de la página. */
+/* A todo el ancho, sin caja: las olas cruzan la pantalla de lado a
+   lado y el texto va centrado encima. */
+.cierre {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Alto mínimo para que las cintas quepan enteras en vertical. El
+     dibujo se escala al ancho (2094 de lienzo) y se recorta lo mismo
+     por arriba que por abajo. Las cintas van de 71 (cresta de la azul)
+     a 619 (fondo de la lila) en los 711 de alto, medido con getBBox; el
+     lado que manda es el de arriba, que exige 569 de esos 2094 escalados,
+     más 5rem de aire. Con menos, en pantallas anchas la cresta azul se
+     cortaba en recto contra el borde de arriba. */
+  min-height: calc(100vw * 569 / 2094 + 5rem);
+
+  /* Margen, no padding: el padding estiraría las olas (van a todo el
+     alto de la sección) en vez de abrir hueco en blanco antes del pie. */
+  margin-top: calc(var(--seccion-pad) * 1.5);
+  margin-bottom: calc(var(--seccion-pad) * 1.5);
+}
+/* En móvil el hueco de arriba pesaba demasiado: con la sección más
+   estrecha, 1.5 veces el ritmo de la página es mucho más aire del que
+   hace falta antes del titular. */
+@media (max-width: 599px) {
+  .cierre {
+    margin-top: calc(var(--seccion-pad) * 0.5);
+  }
+}
+
+.cierre__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cierre__titulo {
+  max-width: 18ch;
+  font-size: clamp(2rem, 1.3rem + 2.4vw, 3.4rem);
+  line-height: 1.14;
+  letter-spacing: -0.038em;
+}
+
+.cierre__titulo span {
+  display: block;
+  color: var(--accent);
+}
+
+.cierre__sub {
+  margin-top: 1rem;
+  max-width: 52ch;
+  /* Un tono más oscuro que en el resto de la web: cae encima del cruce
+     de las dos olas, y ahí --ink-dim se queda en 3,7:1. */
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.cierre__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.5rem, 4vh, 2.25rem);
+}
+
+/* ------------------------------ Olas ---------------------------
+   Detrás de todo y a toda la sección. */
+.cierre__olas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* En móvil la sección es alta y estrecha: "slice" ya encaja el dibujo
+   por el alto, sin recorte vertical de sobra, así que el cruce de las
+   cintas cae siempre a la misma altura relativa, caiga donde caiga el
+   texto. Agrandando el lienzo y subiéndolo (el `overflow: hidden` de
+   `.cierre` recorta lo que sobra) se puede elegir qué franja se ve, y
+   así hacer que el cruce quede en el hueco entre título y subtítulo. */
+@media (max-width: 599px) {
+  .cierre__olas {
+    top: -23.5%;
+    height: 130%;
+  }
+}
+
+.cierre>.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* -------------- Entrada al hacer scroll (la mueve GSAP) --------- */
+.js [data-cierre] {
+  opacity: 0;
+}
+
+.js [data-cierre] {
+  transform: translateY(22px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-cierre] {
+    opacity: 1;
+    transform: none;
+  }
+}
